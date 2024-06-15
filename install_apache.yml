@@ -8,4 +8,14 @@
        name: apache2
        state: absent
        purge: yes
- 
+     when: ansible_distribution == ["Ubuntu","Debian"] 
+   - name: add php support for apache
+     apt: 
+        name: "{{ libapache2-mod-php }}"
+         # to make the pcakage generic
+   - name: remove  apache2 package
+     dnf:
+       name: http
+       state: absent
+       purge: yes
+     when: ansible_distribution == "Centos

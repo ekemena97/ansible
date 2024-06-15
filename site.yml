@@ -1,0 +1,41 @@
+---
+
+- hosts: webservers
+  become: true
+  tasks:
+   - name: install nginx  package
+     apt:
+       name: nginx
+       state: present
+     when: ansible_distribution == ["Ubuntu","Debian"] 
+
+- hosts: dbservers
+  become: true
+  pre_tasks:
+    - name: install mongo db
+      apt_repository:
+        repo: 'deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu {{ ansible_distribution_release }}/mongodb-org/6.0 multiverse'
+        state: present
+        filename: 'mongodb-org-6.0'
+
+    - name: Add MongoDB GPG key
+      apt_key:
+        url: https://www.mongodb.org/static/pgp/server-6.0.asc
+        state: present
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install MongoDB
+      apt:
+        name: mongodb-org
+        state: present
+
+    - name: Start and enable MongoDB service
+      systemd:
+        name: mongod
+        state: started
+        enabled: true
+ 

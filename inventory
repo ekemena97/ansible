@@ -1,3 +1,12 @@
-18.130.139.232 
-35.177.53.46
+[webservers]
+18.130.139.232
+
+
+[drservers]
 13.40.162.148
+
+
+[dbservers]
+35.177.53.46
+
+#when you declare a varaible {{ you come here and type the real pacakga name }
