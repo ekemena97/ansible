@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: true
+  tasks:
+  - name: create user mini
+    tags: always
+    user:
+      name: mini
+      groups: root
+
+  - name: add ssh key for mini
+    tags: always
+    authorized_key:
+      user: mini
+      key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCtBmBqMQrH7GBiG0VqhMoZ5sXldPSI/f5etHjmIi2gtt4IkgW+LFFB/WmAppxTFVKf8lkSjflBtnXzZnHFCY8CGQOYqUIerm1UxptAriHpkc1tRzlWiNq7dKJqf3DdtK53+pzPxEQ+BCeNAVeKnveoNLPSy4HQmWzY4I1ANtC2TTb5KayAqzw4o4RnCDhtJmiTX2gXYe68f7aYcsoF4C7LvhZ9Dlki0RH0fNfdhGltvFEWVIadqNDR7x0Idf6aYwRG3e31CYCBmhhyaAuCWiqvf5z1KHz/0RyqeGhUbLR6YhO8hmknwBex1PkayhYJjNUdHrNp6r0YWUJrLw7K5Zcs6aZ5gDtU0iWg9RU2QBrKlHujQqpotZEYx25g9ck67gH+MqC5Wd4lkpEGXcBlUSXXvVEj2jHOcxIh8xlRo6HD/SHQQTCf7EfrnsApvQIrc+EoUrgIWYSQADcZgAETh+IQkEjHCPZqy7jjyMRpTLT7IcQ1ObrHpw/y4XrxndKvldD5tDVFjuGJ+VxzFX3manS33pek3o/zSoRnrglmLW/GyPqN5jGJjWhZPOqiyMskgWoKMomVcVKBuLKpNQRbl+ODvMdJK6GEHMQup2rbfTzWDUqHzEXvWQBihlVanf7FyfD05JqVoWdq+z3zt3XZtSygs3cUHSUCBvGPrfl20RFp2w== ubuntu@ip-172-31-20-6"
+
+  - name: add sudoers file for mini
+    copy:
+      src: sudoer_mini
+      dest: /etc/sudoers.d/mini
+      owner: root
+      group: root
+      mode: 0440

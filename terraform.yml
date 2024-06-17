@@ -1,0 +1,47 @@
+---
+
+- hosts: webservers
+  become: true
+  tasks:
+    # - name: install zip
+    # #prerequiste for terraform
+    #   package: 
+    #    name: unzip
+       
+    - name: Install required packages
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - wget
+        - gnupg
+
+    - name: Add HashiCorp GPG key
+      command: wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+      args:
+        creates: /usr/share/keyrings/hashicorp-archive-keyring.gpg
+
+    - name: Create HashiCorp repository file
+      copy:
+        dest: /etc/apt/sources.list.d/hashicorp.list
+        content: "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com {{ ansible_distribution_release | lower }} main"
+
+    - name: Update APT package list
+      shell: apt-get update
+      register: update_result
+      failed_when: "'failed' in update_result.stderr"
+
+    - name: Install Terraform
+      apt:
+        name: terraform
+        state: present
+
+    - name: Verify Terraform installation
+      command: terraform version
+      register: terraform_version
+    - name: Display Terraform version
+      debug:
+        msg: "Terraform version: {{ terraform_version.stdout }}"
+
+     

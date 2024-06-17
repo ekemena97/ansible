@@ -1,0 +1,24 @@
+---
+
+- hosts: webservers
+  become: true
+  tasks:
+    - name: install zip
+    #prerequiste for terraform
+      package: 
+       name: unzip
+      - name: install  wget
+    #prerequiste for terraform
+      package: 
+       name: wget
+
+
+
+    - name: install teraform
+      unarchive:
+       src: https://releases.hashicorp.com/terraform/1.8.5/terraform_1.8.5_linux_amd64.zip"
+       dest: /usr/local/bin
+       remote_src: yes
+       mode: 0755
+       owner: root
+       group: root

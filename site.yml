@@ -7,7 +7,16 @@
      apt:
        name: nginx
        state: present
-     when: ansible_distribution == ["Ubuntu","Debian"] 
+     when: ansible_distribution == ["Ubuntu","Debian"]
+ #using copy and tags
+   - name: copy  html file
+     tags: html
+     copy:
+       src: index.html
+       dest: /var/www/html/index.html
+       owner: root
+       group: root
+       mode: 0644
 
 - hosts: dbservers
   become: true
